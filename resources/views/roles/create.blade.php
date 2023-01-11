@@ -1,0 +1,60 @@
+@extends('permission-editor::layouts.app')
+
+@section('content')
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <h1 class="text-xl font-semibold text-gray-900">Create Role</h1>
+        </div>
+    </div>
+    <div class="mt-8 flex flex-col">
+        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                    <div class="sm:max-w-md px-6 py-4">
+
+                        @if ($errors->any())
+                            <div class="text-red-500 text-sm mb-4">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('permission-editor.roles.store') }}" method="POST">
+                            @csrf
+                            <div>
+                                <label class="block font-medium text-sm text-gray-700" for="name">
+                                    Name
+                                </label>
+
+                                <input type="text" name="name" id="name" value="{{ old('name') }}" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full" required="required" autofocus="autofocus">
+                            </div>
+
+                            @if ($permissions->count())
+                            <div class="mt-4">
+                                <label class="block font-medium text-sm text-gray-700" for="name">
+                                    Permissions
+                                </label>
+
+                                @foreach ($permissions as $id => $name)
+                                    <input type="checkbox" name="permissions[]" id="permission-{{ $id }}" value="{{ $id }}" @checked(in_array($id, old('permissions', [])))>
+                                    <label class="text-sm font-medium text-gray-700" for="permission-{{ $id }}">{{ $name }}</label>
+                                    <br />
+                                @endforeach
+                            </div>
+                            @endif
+
+                            <div class="mt-4">
+                                <button type="submit" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
